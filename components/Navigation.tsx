@@ -67,9 +67,11 @@ export default function Navigation() {
           className="flex items-center gap-2 group"
           whileHover={{ scale: 1.02 }}
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center">
-            <span className="text-white text-xs font-bold">DS</span>
-          </div>
+          <img
+            src="/logo.png"
+            alt="Devansh Sharma Logo"
+            className="w-8 h-8 object-contain rounded-lg"
+          />
           <span className="font-semibold text-zinc-900 dark:text-white tracking-tight">
             Devansh<span className="text-cyan-500">.</span>
           </span>

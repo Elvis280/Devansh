@@ -9,9 +9,11 @@ export default function Footer() {
     <footer className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#111111]">
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center">
-            <span className="text-white text-[10px] font-bold">DS</span>
-          </div>
+          <img
+            src="/logo.png"
+            alt="Devansh Sharma Logo"
+            className="w-6 h-6 object-contain rounded-md"
+          />
           <span className="text-sm text-zinc-500 dark:text-zinc-400">
             © {new Date().getFullYear()} Devansh Sharma
           </span>

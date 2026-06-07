@@ -196,10 +196,13 @@ export default function Loader({ onDone }: { onDone: () => void }) {
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                  className="w-10 h-10 rounded-lg border-2 border-cyan-500/60 flex items-center justify-center relative"
+                  className="w-10 h-10 rounded-lg border-2 border-cyan-500/60 flex items-center justify-center relative overflow-hidden bg-zinc-950/50"
                 >
-                  <div className="absolute inset-1 rounded border border-violet-500/40" />
-                  <span className="text-cyan-400 font-bold text-sm z-10">DS</span>
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    className="w-7 h-7 object-contain"
+                  />
                 </motion.div>
 
                 <div>
