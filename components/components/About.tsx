@@ -42,7 +42,7 @@ export default function About() {
               <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/20 to-violet-500/20 rounded-3xl blur-2xl" />
               <div className="relative rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-square">
                 <Image
-                  src="/Dev.png"
+                  src={personalInfo.avatar}
                   alt="Devansh Sharma"
                   fill
                   className="object-cover"
