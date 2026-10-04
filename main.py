@@ -4,10 +4,11 @@ All data is passed directly from Python dicts → Jinja2 templates.
 Static files (CSS, JS, images) are served from /static.
 """
 import json
+from datetime import date
 from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -110,6 +111,50 @@ async def index(request: Request):
 @app.get("/favicon.svg", include_in_schema=False)
 async def favicon():
     return FileResponse(STATIC_DIR / "img" / "favicon.svg", media_type="image/svg+xml")
+
+
+# ── Sitemap ───────────────────────────────────────────────────────────────────
+@app.get("/sitemap.xml", include_in_schema=False)
+async def sitemap():
+    """Generate an XML sitemap for the portfolio."""
+    base_url = personal_info.get("portfolio", "https://devansh-iota.vercel.app").rstrip("/")
+    today = date.today().isoformat()
+
+    # Canonical entry for the portfolio (Google Search Console compliant without '#' fragments)
+    urls = [
+        ("/", "weekly", "1.0"),
+    ]
+
+    url_entries = "\n".join(
+        f"  <url>\n"
+        f"    <loc>{base_url}{path}</loc>\n"
+        f"    <lastmod>{today}</lastmod>\n"
+        f"    <changefreq>{freq}</changefreq>\n"
+        f"    <priority>{priority}</priority>\n"
+        f"  </url>"
+        for path, freq, priority in urls
+    )
+
+    sitemap_xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{url_entries}\n"
+        '</urlset>'
+    )
+
+    return Response(content=sitemap_xml, media_type="application/xml")
+
+
+# ── Robots.txt ────────────────────────────────────────────────────────────────
+@app.get("/robots.txt", include_in_schema=False)
+async def robots():
+    base_url = personal_info.get("portfolio", "https://devansh-iota.vercel.app").rstrip("/")
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        f"Sitemap: {base_url}/sitemap.xml\n"
+    )
+    return Response(content=content, media_type="text/plain")
 
 
 # ── JSON API Routes ───────────────────────────────────────────────────────────

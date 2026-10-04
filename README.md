@@ -1,6 +1,7 @@
 # Devansh Sharma — Portfolio
 
-> **AI Engineer & Systems Builder** — Server-side rendered portfolio built with **FastAPI + Jinja2**.
+> **AI Engineer & Systems Builder** — Server-side rendered portfolio built with **FastAPI + Jinja2**.  
+> **Live Site:** [https://devansh-iota.vercel.app](https://devansh-iota.vercel.app)
 
 ## Stack
 

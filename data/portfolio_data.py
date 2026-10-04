@@ -18,7 +18,7 @@ personal_info = {
     "twitter": "https://x.com/Devansh280",
     "leetcode": "https://leetcode.com/u/Devansh28",
     "geeksforgeeks": "https://www.geeksforgeeks.org/user/devansh28sharma/",
-    "portfolio": "https://portfoliov2-seven-mu.vercel.app",
+    "portfolio": "https://devansh-iota.vercel.app",
     "location": "Lucknow, Uttar Pradesh, India",
     "country": "India",
     "status": "AVAILABLE FOR → INTERNSHIPS / OPPORTUNITIES",
