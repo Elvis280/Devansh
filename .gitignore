@@ -1,46 +1,90 @@
-# Frontend (Node/React/Vite)
-node_modules/
-dist/
-build/
-.next/
-out/
-.pnp
-.pnp.js
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-.vercel
-
-# Backend (Python/FastAPI)
+# Python / FastAPI
 __pycache__/
 *.py[cod]
 *$py.class
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
 .venv/
 venv/
 env/
 ENV/
-*.sqlite3
+env.bak/
+venv.bak/
 
-# Environment Variables
+# Testing & Quality
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+
+# Databases & Local Storage
+*.sqlite
+*.sqlite3
+*.db
+
+# Environment Variables & Secrets
 .env
 .env.*
 !.env.example
+*.pem
+*.key
 
-# OS / IDE
+# OS & Filesystem
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
+
+# IDEs & Editors
 .vscode/
 .idea/
+*.sublime-workspace
+*.sublime-project
 *.swp
 *.swo
+*~
 
-# Misc
+# Logs & Runtime
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node & Package Managers
+node_modules/
+.npm
+.vite/
+
+# Local Scratch, Agent & Temp Dirs
 .cache/
-.turbo/
+scratch/
+.tempmediaStorage/
+
