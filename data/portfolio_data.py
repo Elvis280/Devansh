@@ -48,7 +48,7 @@ personal_info = {
         "location": "Lucknow, India",
     },
     "avatar": "/Dev.png",
-    "cv": "/images/Devansh_CV.pdf",
+    "cv": "/images/Devansh_Resume.pdf",
     "roles": [
         "Forward Deployed Engineer",
         "AI & Systems Engineer",

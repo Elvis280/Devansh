@@ -355,6 +355,14 @@
           </div>
           {% endfor %}
         </div>
+
+        <!-- Download Resume CTA in Dossier -->
+        <div style="margin-top:0.25rem; padding-top:0.85rem; border-top:1px solid rgba(255,255,255,0.08);">
+          <a href="{{ personal.cv }}" download="Devansh_Resume.pdf" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none; width:fit-content; padding:0.55rem 1.1rem; font-size:11px;">
+            <span>DOWNLOAD RESUME (PDF)</span>
+            <span>↓</span>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -1552,7 +1560,7 @@
         ('TWITTER / X', 'x.com/Devansh280', personal.twitter, 'twitter'),
         ('RESUME (PDF)','Download My Resume', personal.cv, 'resume'),
         ] %}
-        <a href="{{ link[2] }}" target="_blank" rel="noopener noreferrer" class="contact-link-row">
+        <a href="{{ link[2] }}" {% if link[3] == 'resume' %}download="Devansh_Resume.pdf"{% endif %} target="_blank" rel="noopener noreferrer" class="contact-link-row">
           <div style="display:flex; align-items:center; gap:1.5rem;">
             <div class="contact-link-icon">
               {% if link[3] == 'github' %}

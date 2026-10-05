@@ -113,6 +113,20 @@ async def favicon():
     return FileResponse(STATIC_DIR / "img" / "favicon.svg", media_type="image/svg+xml")
 
 
+# ── Resume / CV Direct Routes ──────────────────────────────────────────────────
+@app.get("/resume", include_in_schema=False)
+@app.get("/cv", include_in_schema=False)
+async def resume():
+    resume_path = STATIC_DIR / "img" / "images" / "Devansh_Resume.pdf"
+    if not resume_path.exists():
+        resume_path = STATIC_DIR / "img" / "images" / "Devansh_CV.pdf"
+    return FileResponse(
+        resume_path,
+        media_type="application/pdf",
+        filename="Devansh_Resume.pdf",
+    )
+
+
 # ── Sitemap ───────────────────────────────────────────────────────────────────
 @app.get("/sitemap.xml", include_in_schema=False)
 async def sitemap():
