@@ -15,6 +15,8 @@ from fastapi.templating import Jinja2Templates
 from data.portfolio_data import (
     personal_info,
     personality,
+    experience,
+    leadership,
     stats,
     skill_categories,
     projects,
@@ -51,52 +53,113 @@ def jinja_zfill(value: str, width: int) -> str:
 templates.env.filters["zfill"] = jinja_zfill
 
 
+# ── Precomputed Static Context (Optimized: generated once at startup) ────────
+def _enrich_image_path(path: str | None, prefix: str = "/static/img") -> str:
+    if not path:
+        return ""
+    return path if path.startswith("/static") else f"{prefix}{path}"
+
+ENRICHED_PROJECTS = []
+for p in projects:
+    ep = dict(p)
+    if ep.get("image"):
+        ep["image"] = _enrich_image_path(ep["image"])
+    ENRICHED_PROJECTS.append(ep)
+
+ENRICHED_CERTS = []
+for c in certificates:
+    ec = dict(c)
+    if ec.get("image"):
+        ec["image"] = _enrich_image_path(ec["image"])
+    ENRICHED_CERTS.append(ec)
+
+ENRICHED_PERSONAL = dict(personal_info)
+if ENRICHED_PERSONAL.get("cv"):
+    ENRICHED_PERSONAL["cv"] = _enrich_image_path(ENRICHED_PERSONAL["cv"])
+if ENRICHED_PERSONAL.get("avatar"):
+    ENRICHED_PERSONAL["avatar"] = _enrich_image_path(ENRICHED_PERSONAL["avatar"])
+
+ALGOZ_GALLERY = [
+    {"src": "/static/img/images/AlgoZ1.jpg", "caption": "AlgoZenith Flagship Workshop & Coding Contest", "tag": "WORKSHOP"},
+    {"src": "/static/img/images/AlgoZ2.jpeg", "caption": "Competitive Programming Mentorship Session", "tag": "MENTORSHIP"},
+    {"src": "/static/img/images/AlgoZ3.jpg", "caption": "Student Chapter Technical Keynote & Orientation", "tag": "MEETUP"},
+    {"src": "/static/img/images/AlgoZ4.jpg", "caption": "Campus Coding League & Problem Solving Round", "tag": "CONTEST"},
+    {"src": "/static/img/images/AlgoZ5.JPG", "caption": "AlgoZenith Executive Team & Lead Organizers", "tag": "CORE TEAM"},
+    {"src": "/static/img/images/AlgoZ6.jpg", "caption": "Hands-on Data Structures & Algorithm Lab", "tag": "DSA LAB"},
+    {"src": "/static/img/images/AlgoZ7.jpg", "caption": "Hackathon Strategy & Team Collaboration", "tag": "HACKATHON"},
+    {"src": "/static/img/images/AlgoZ8.JPG", "caption": "Technical Session Q&A and Participant Discussion", "tag": "COMMUNITY"},
+    {"src": "/static/img/images/AlgoZ9.jpeg", "caption": "Interview Prep & Advanced Algorithm Deep Dive", "tag": "PREP"},
+    {"src": "/static/img/images/AlgoZ10.JPG", "caption": "Event Finale & Student Recognition Ceremony", "tag": "AWARDS"},
+]
+
+GFG_GALLERY = [
+    {"src": "/static/img/images/GFG1.jpg", "caption": "GeeksforGeeks Chapter Flagship Hackathon Opening", "tag": "KEYNOTE"},
+    {"src": "/static/img/images/GFG2.jpg", "caption": "Campus Technical Outreach & Registration Booth", "tag": "OUTREACH"},
+    {"src": "/static/img/images/GFG3.jpg", "caption": "Faculty Connect & Guest Speaker Panel", "tag": "FACULTY"},
+    {"src": "/static/img/images/GFG4.jpg", "caption": "Coding Contest Participants in Action", "tag": "CONTEST"},
+    {"src": "/static/img/images/GFG5.jpg", "caption": "PR Lead & Event Organizer Coordination", "tag": "LEADERSHIP"},
+    {"src": "/static/img/images/GFG6.jpg", "caption": "Seminar on Modern Tech Stacks & Development", "tag": "SEMINAR"},
+    {"src": "/static/img/images/GFG7.jpg", "caption": "GeeksforGeeks_SRMCEM Core Team Group Photo", "tag": "TEAM"},
+]
+
+DRIFTWALL_ITEMS = []
+for item in ALGOZ_GALLERY:
+    DRIFTWALL_ITEMS.append({
+        "image": item["src"],
+        "title": item["caption"],
+        "tag": item["tag"],
+        "category": "AlgoZenith SRMCEM",
+        "href": "/journey",
+    })
+for item in GFG_GALLERY:
+    DRIFTWALL_ITEMS.append({
+        "image": item["src"],
+        "title": item["caption"],
+        "tag": item["tag"],
+        "category": "GeeksforGeeks_SRMCEM",
+        "href": "/journey",
+    })
+for p in ENRICHED_PROJECTS[:3]:
+    if p.get("image"):
+        DRIFTWALL_ITEMS.append({
+            "image": p["image"],
+            "title": f"{p['title']} — {p.get('subtitle', '')}",
+            "tag": p.get("category", "SYSTEM").split()[0].upper(),
+            "category": "Shipped System",
+            "href": p.get("github", "#projects"),
+        })
+for c in ENRICHED_CERTS:
+    if c.get("featured") and c.get("image"):
+        DRIFTWALL_ITEMS.append({
+            "image": c["image"],
+            "title": f"{c['title']} ({c.get('issuer', '')})",
+            "tag": c.get("category", "CREDENTIAL"),
+            "category": "Verified Credential",
+            "href": c.get("verification_url", "#achievements"),
+        })
+
+STATIC_CONTEXT = {
+    "personal":          ENRICHED_PERSONAL,
+    "personality":       personality,
+    "stats":             stats,
+    "skills":            skill_categories,
+    "projects":          ENRICHED_PROJECTS,
+    "experiments":       experiments,
+    "journey":           journey_milestones,
+    "experience":        experience,
+    "leadership":        leadership,
+    "algoz_gallery":     ALGOZ_GALLERY,
+    "gfg_gallery":       GFG_GALLERY,
+    "driftwall_items":   DRIFTWALL_ITEMS,
+    "driftwall_json":    json.dumps(DRIFTWALL_ITEMS),
+    "certificates":      ENRICHED_CERTS,
+    "certificates_json": json.dumps(ENRICHED_CERTS),
+}
+
+
 def _build_context(request: Request) -> dict:
-    """Build the shared template context from portfolio data."""
-
-    # Rich stats displayed across hero and journey
-    rich_stats = [
-        {"label": "Projects Built",    "value": "10+", "desc": "Shipped & live"},
-        {"label": "AI Systems",        "value": "6+",  "desc": "Agents, RAG & ML"},
-        {"label": "Certifications",    "value": "11+", "desc": "Verified credentials"},
-        {"label": "Tech Stack",        "value": "25+", "desc": "Python, APIs, Vector, DBs"},
-    ]
-
-    # Prepend /static/img/ prefix for project images
-    enriched_projects = []
-    for p in projects:
-        ep = dict(p)
-        if ep.get("image") and not ep["image"].startswith("/static"):
-            ep["image"] = f"/static/img{ep['image']}"
-        enriched_projects.append(ep)
-
-    # Prepend /static/img/ prefix for certificate images
-    enriched_certs = []
-    for c in certificates:
-        ec = dict(c)
-        if ec.get("image") and not ec["image"].startswith("/static"):
-            ec["image"] = f"/static/img{ec['image']}"
-        enriched_certs.append(ec)
-
-    # Enrich personal info paths
-    personal = dict(personal_info)
-    if personal.get("cv") and not personal["cv"].startswith("/static"):
-        personal["cv"] = f"/static/img{personal['cv']}"
-    if personal.get("avatar") and not personal["avatar"].startswith("/static"):
-        personal["avatar"] = f"/static/img{personal['avatar']}"
-
-    return {
-        "request":      request,
-        "personal":     personal,
-        "personality":  personality,
-        "stats":        rich_stats,
-        "skills":       skill_categories,
-        "projects":     enriched_projects,
-        "experiments":  experiments,
-        "journey":      journey_milestones,
-        "certificates": enriched_certs,
-        "certificates_json": json.dumps(enriched_certs),
-    }
+    """Build the template context from precomputed portfolio data."""
+    return {"request": request, **STATIC_CONTEXT}
 
 
 # ── Main SSR Route ────────────────────────────────────────────────────────────
@@ -104,6 +167,15 @@ def _build_context(request: Request) -> dict:
 async def index(request: Request):
     ctx = _build_context(request)
     return templates.TemplateResponse(request=request, name="index.html", context={k: v for k, v in ctx.items() if k != "request"})
+
+
+# ── Dedicated Journey Page ────────────────────────────────────────────────────
+@app.get("/journey", response_class=HTMLResponse, include_in_schema=False)
+@app.get("/journey/{milestone_id}", response_class=HTMLResponse, include_in_schema=False)
+async def journey_page(request: Request, milestone_id: str | None = None):
+    ctx = _build_context(request)
+    ctx["active_milestone"] = milestone_id or "all"
+    return templates.TemplateResponse(request=request, name="journey.html", context={k: v for k, v in ctx.items() if k != "request"})
 
 
 # ── Favicon Routes ────────────────────────────────────────────────────────────
@@ -134,9 +206,10 @@ async def sitemap():
     base_url = personal_info.get("portfolio", "https://devansh-iota.vercel.app").rstrip("/")
     today = date.today().isoformat()
 
-    # Canonical entry for the portfolio (Google Search Console compliant without '#' fragments)
+    # Canonical entries for the portfolio
     urls = [
         ("/", "weekly", "1.0"),
+        ("/journey", "monthly", "0.9"),
     ]
 
     url_entries = "\n".join(

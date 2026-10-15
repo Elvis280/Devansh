@@ -1097,16 +1097,6 @@ img { max-width: 100%; display: block; }
 .exp-card-footer { margin-top:auto; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.08); display:flex; align-items:flex-end; justify-content:space-between; }
 .exp-arrow { color:rgba(163,230,53,0.7); transition:color 0.2s,transform 0.2s; font-size:1.15rem; }
 .exp-card:hover .exp-arrow { color:var(--accent); transform:translate(4px,-4px); }
-.cat-filter { border:1px solid rgba(255,255,255,0.15); }
-.cat-filter-btn { width:100%; height:36px; display:flex; align-items:center; justify-content:space-between; padding:0 0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase; color:rgba(255,255,255,0.55); transition:color 0.2s,background 0.2s; }
-.cat-filter-btn:last-child { border-bottom:none; }
-.cat-filter-btn:hover { color:#fff; background:rgba(255,255,255,0.02); }
-.cat-filter-btn.active { color:#fff; background:#0d0d0d; border-left:2px solid var(--accent); }
-.cat-count { color:var(--accent); font-family:var(--font-mono); }
-.exp-modal { position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.95); backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.3s; overflow-y:auto; }
-.exp-modal.open { opacity:1; pointer-events:auto; }
-.exp-modal-inner { position:relative; width:100%; max-width:1150px; background:#070707; border:1px solid rgba(255,255,255,0.15); padding:2rem; margin:1.5rem auto; }
-.log-snippet { background:#000; border:1px solid rgba(255,255,255,0.1); padding:1.25rem; font-family:var(--font-mono); font-size:10.5px; line-height:1.75; color:var(--accent); white-space:pre-wrap; overflow-x:auto; }
 
 /* ══════════ ARSENAL / TECH STACK ══════════ */
 .arsenal-section { background:#060606; }
@@ -3166,4 +3156,544 @@ body.ach-modal-open {
   .social-rail { display: none; }
   .hero-location { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   HOME PAGE JOURNEY LINK AFFORDANCES & SIDEBAR CTA
+══════════════════════════════════════════════════════════════ */
+.exp-sidebar-journey-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1.35rem;
+  padding: 0.7rem 1.15rem;
+  border: 1px solid var(--accent);
+  background: rgba(163, 230, 53, 0.08);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.25s ease;
+  width: fit-content;
+  text-decoration: none;
+}
+.exp-sidebar-journey-btn:hover {
+  background: var(--accent);
+  color: #050505;
+  box-shadow: 0 0 24px rgba(163, 230, 53, 0.45);
+  transform: translateY(-2px);
+}
+.exp-sidebar-journey-btn svg {
+  transition: transform 0.25s ease;
+}
+.exp-sidebar-journey-btn:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHOTO LIGHTBOX MODAL
+══════════════════════════════════════════════════════════════ */
+.journey-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.journey-lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.journey-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 4, 0.95);
+  backdrop-filter: blur(14px);
+}
+.journey-lightbox-container {
+  position: relative;
+  z-index: 2;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.journey-lightbox-close {
+  position: absolute;
+  top: -46px;
+  right: 0;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.journey-lightbox-close:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(163, 230, 53, 0.15);
+  transform: rotate(90deg);
+}
+
+.journey-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 3;
+}
+.journey-lightbox-prev { left: -64px; }
+.journey-lightbox-next { right: -64px; }
+@media (max-width: 900px) {
+  .journey-lightbox-prev { left: 10px; }
+  .journey-lightbox-next { right: 10px; }
+}
+.journey-lightbox-nav:hover {
+  background: rgba(163, 230, 53, 0.2);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.journey-lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #080b08;
+  border: 1px solid rgba(163, 230, 53, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(163, 230, 53, 0.25);
+}
+.journey-lightbox-img-wrap {
+  max-width: 82vw;
+  max-height: 72vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+.journey-lightbox-img-wrap img {
+  max-width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  display: block;
+}
+.journey-lightbox-meta {
+  width: 100%;
+  padding: 0.95rem 1.4rem;
+  background: rgba(12, 16, 12, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.journey-lightbox-meta-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.journey-lightbox-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  padding: 0.15rem 0.5rem;
+  background: rgba(163, 230, 53, 0.1);
+  border: 1px solid rgba(163, 230, 53, 0.4);
+  border-radius: 3px;
+}
+.journey-lightbox-counter {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.5);
+}
+.journey-lightbox-caption {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.4;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   REACT BITS <DriftWall /> CORE CSS RULES
+══════════════════════════════════════════════════════════════ */
+.drift-wall {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  perspective: var(--dw-perspective, 1200px);
+  perspective-origin: 50% 50%;
+  --dw-tile-w: 220px;
+  --dw-tile-h: 144px;
+  --dw-gap: 18px;
+  --dw-radius: 12px;
+  --dw-lift: 72px;
+  --dw-dim: 0.6;
+  --dw-gray: 0;
+  --dw-overlay: #040804;
+  --dw-edge: 45%;
+  -webkit-mask-image:
+    radial-gradient(ellipse 82% 84% at 50% 48%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(ellipse 82% 84% at 50% 48%, #000 var(--dw-edge), transparent 100%),
+    linear-gradient(to top, #000 var(--dw-edge), transparent 100%);
+  mask-composite: intersect;
+}
+
+.drift-wall__plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: row;
+  transform-style: preserve-3d;
+  cursor: grab;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.drift-wall__col {
+  position: relative;
+  width: calc(var(--dw-tile-w) + var(--dw-gap));
+  transform-style: preserve-3d;
+}
+
+.drift-wall__track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.drift-wall__tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(var(--dw-tile-h) + var(--dw-gap));
+  flex: 0 0 auto;
+  outline: none;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.drift-wall__inner {
+  position: absolute;
+  inset: calc(var(--dw-gap) / 2);
+  display: block;
+  border-radius: var(--dw-radius);
+  overflow: hidden;
+  background: #090e09;
+  border: 1px solid rgba(163, 230, 53, 0.16);
+  opacity: var(--dw-dim);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+}
+
+.drift-wall__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.drift-wall__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--dw-overlay);
+  opacity: 0.44;
+  pointer-events: none;
+  will-change: opacity;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom HUD chip badge on top-left */
+.drift-wall__chip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 4;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  background: rgba(3, 6, 3, 0.94);
+  border: 1px solid rgba(163, 230, 53, 0.45);
+  border-radius: 3px;
+  padding: 2px 6px;
+  text-transform: uppercase;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Title & Category HUD Bar on bottom */
+.drift-wall__title-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  padding: 1.2rem 8px 6px 8px;
+  background: linear-gradient(to top, rgba(3, 6, 3, 0.95) 0%, rgba(3, 6, 3, 0.75) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.drift-wall__category {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(163, 230, 53, 0.9);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drift-wall__title-text {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Hover / Focus Active States */
+.drift-wall__tile.is-active .drift-wall__inner,
+.drift-wall__tile:focus-visible .drift-wall__inner {
+  opacity: 1;
+  transform: translate3d(0, 0, var(--dw-lift, 70px));
+  border-color: rgba(163, 230, 53, 0.85);
+  box-shadow: 
+    0 24px 60px -12px rgba(0, 0, 0, 0.95),
+    0 0 30px rgba(163, 230, 53, 0.35);
+}
+
+.drift-wall__tile.is-active .drift-wall__overlay,
+.drift-wall__tile:focus-visible .drift-wall__overlay {
+  opacity: 0;
+}
+
+.drift-wall__tile:focus-visible .drift-wall__inner {
+  box-shadow:
+    0 24px 60px -12px rgba(0, 0, 0, 0.95),
+    0 0 0 2px rgba(163, 230, 53, 0.9);
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  .drift-wall__plane,
+  .drift-wall__track {
+    will-change: auto;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   FULL SCREEN DRIFT WALL EXPERIENCE (/journey)
+══════════════════════════════════════════════════════════════ */
+body.journey-fullscreen-active,
+body:has(.journey-fullscreen-page) {
+  overflow: hidden !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #030603 !important;
+}
+
+body.journey-fullscreen-active .nav-header,
+body.journey-fullscreen-active .social-rail,
+body:has(.journey-fullscreen-page) .nav-header,
+body:has(.journey-fullscreen-page) .social-rail {
+  display: none !important;
+}
+
+.journey-fullscreen-page {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #030503;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(163, 230, 53, 0.05) 0%, transparent 80%),
+    linear-gradient(rgba(163, 230, 53, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(163, 230, 53, 0.025) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+}
+
+.drift-wall-fullscreen {
+  position: absolute;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1;
+}
+
+/* Floating HUD Overlay */
+.drift-hud-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+}
+
+/* Top HUD Row */
+.drift-hud-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  pointer-events: none;
+  gap: 1rem;
+}
+
+.drift-hud-top-left,
+.drift-hud-top-right {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  pointer-events: auto;
+}
+
+/* Interactive HUD Buttons */
+.drift-hud-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.45rem 0.95rem;
+  background: rgba(8, 12, 8, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+.drift-hud-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(12, 20, 12, 0.9);
+  box-shadow: 0 0 16px rgba(163, 230, 53, 0.28);
+  transform: translateY(-1px);
+}
+.drift-hud-back-btn:hover {
+  transform: translateY(-1px) translateX(-2px);
+}
+
+.drift-bracket {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* Bottom HUD Row */
+.drift-hud-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  pointer-events: none;
+  gap: 1rem;
+}
+
+.drift-hud-bottom-left,
+.drift-hud-bottom-center,
+.drift-hud-bottom-right {
+  pointer-events: auto;
+}
+
+.drift-hud-counter-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: #94a3b8;
+  background: rgba(6, 10, 6, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0.42rem 0.85rem;
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+@media (max-width: 900px) {
+  .drift-hud-overlay {
+    padding: 1rem 1.25rem;
+  }
+}
+
+
 

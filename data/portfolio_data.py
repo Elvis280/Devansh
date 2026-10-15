@@ -103,18 +103,41 @@ leadership = [
     {
         "id": "algozenith-lead",
         "role": "Technical Lead",
-        "org": "AlgoZenith Student Chapter, SRMCEM",
+        "org": "AlgoZenith SRMCEM",
         "period": "Aug 2025 – Aug 2026",
+        "employment_type": "Part-time",
+        "location_type": "On-site",
+        "duration": "1 yr 1 mo",
+        "skills": ["Technical Project Leadership", "Technical Leadership"],
         "bullets": [
             "Led 8+ coding events and DSA sessions for 50+ students, while mentoring 20+ in competitive programming and interview preparation.",
         ],
     },
     {
         "id": "gfg-lead",
-        "role": "Faculty Connect & PR Lead",
-        "org": "GeeksforGeeks Student Chapter, SRMCEM",
-        "period": "Oct 2024 – Aug 2026",
+        "role": "Faculty connect & PR Lead",
+        "org": "GeeksforGeeks_SRMCEM",
+        "period": "May 2025 – Aug 2026",
+        "total_period": "Oct 2024 – Aug 2026 (1 yr 11 mos)",
+        "roles": [
+            {
+                "title": "Faculty connect & PR Lead",
+                "period": "May 2025 – Aug 2026",
+                "duration": "1 yr 4 mos",
+                "employment_type": "Part-time",
+                "location": "India · Hybrid",
+            },
+            {
+                "title": "Technical Coordinator",
+                "period": "Oct 2024 – May 2025",
+                "duration": "8 mos",
+                "employment_type": "Full-time",
+                "location": "Lucknow, Uttar Pradesh, India",
+            },
+        ],
         "bullets": [
+            "Faculty connect & PR Lead: May 2025 – Aug 2026 (Part-time · Hybrid · 1 yr 4 mos).",
+            "Technical Coordinator: Oct 2024 – May 2025 (8 mos · Lucknow, India).",
             "Coordinated faculty and organizer outreach for 9+ technical events, including contests, seminars, and workshops.",
         ],
     },
@@ -466,7 +489,7 @@ journey_milestones = [
         "roles": [
             {"title": "AI/ML Intern", "org": "SRDT Training Program (College Organized)", "period": "2024 – 2025"},
             {"title": "Python Full-Stack Intern", "org": "SRDT Training Program (College Organized)", "period": "2024"},
-            {"title": "Faculty Connect & PR Lead", "org": "GeeksforGeeks Student Chapter, SRMCEM", "period": "Oct 2024 – Aug 2026"},
+            {"title": "Technical Coordinator", "org": "GeeksforGeeks_SRMCEM", "period": "Oct 2024 – May 2025"},
         ],
         "achievements": [
             "5-Day AI Agents Intensive Course (Google)",
@@ -490,8 +513,8 @@ journey_milestones = [
             "Completed Semrush SEO Crash Course with Brian Dean",
         ],
         "roles": [
-            {"title": "Technical Lead", "org": "AlgoZenith Student Chapter, SRMCEM", "period": "Aug 2025 – Aug 2026"},
-            {"title": "Faculty Connect & PR Lead", "org": "GeeksforGeeks Student Chapter, SRMCEM", "period": "Oct 2024 – Aug 2026"},
+            {"title": "Technical Lead", "org": "AlgoZenith SRMCEM", "period": "Aug 2025 – Aug 2026"},
+            {"title": "Faculty connect & PR Lead", "org": "GeeksforGeeks_SRMCEM", "period": "May 2025 – Aug 2026"},
         ],
         "achievements": [
             "Smart India Hackathon (SIH) 2025 Qualified",
@@ -517,6 +540,24 @@ journey_milestones = [
         "achievements": [
             "Production-ready RAG & Agentic AI portfolio",
             "Open to global Forward Deployed & Software Engineering roles",
+        ],
+    },
+    {
+        "year": "2027",
+        "title": "B.Tech Graduation & Industry Deployment",
+        "tagline": "Completing B.Tech CSE (2023 – 2027) & scaling production software solutions",
+        "description": "Graduating with B.Tech in Computer Science and Engineering from SRMCEM, Lucknow (2023 – 2027). Scaling production software, architecting enterprise AI pipelines, and solving high-impact problems as a Forward Deployed Engineer.",
+        "highlights": [
+            "B.Tech CSE degree completion at SRMCEM, Lucknow (Expected May 2027)",
+            "Transitioning from high-velocity prototyping to enterprise-grade AI deployment",
+            "Delivering reliable, real-world solutions across Forward Deployed engineering domains",
+        ],
+        "roles": [
+            {"title": "B.Tech Graduate & Systems Engineer", "org": "Forward Deployed & Industry", "period": "2027"},
+        ],
+        "achievements": [
+            "B.Tech in Computer Science and Engineering (2023 – 2027)",
+            "Engineering end-to-end autonomous and scalable AI systems",
         ],
     },
 ]
@@ -678,8 +719,8 @@ certificates = [
         "category": "ANALYTICS",
         "credential": "Tableau Analytics Specialist Certification",
         "image": "/certificates/Data Analytics with Specialization in Tableau.png",
-        "verification_url": "https://www.jobaajlearnings.com//certificate?file=certificate-329792-37-0.jpeg",
-        "url": "https://www.jobaajlearnings.com//certificate?file=certificate-329792-37-0.jpeg",
+        "verification_url": "https://www.jobaajlearnings.com/certificate?file=certificate-329792-37-0.jpeg",
+        "url": "https://www.jobaajlearnings.com/certificate?file=certificate-329792-37-0.jpeg",
         "skills": ["Tableau", "Data Analytics", "Business Intelligence", "Data Visualization", "Dashboard Design"],
         "learned": [
             "Engineered interactive executive dashboards tracking key performance metrics.",

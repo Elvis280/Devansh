@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="journey-fullscreen-page" id="journey-fullscreen-page">
+
+  <!-- 3D DRIFT WALL CANVAS (FULLSCREEN 100VW x 100VH) -->
+  <div id="journey-drift-wall" class="drift-wall-fullscreen"></div>
+
+  <!-- FLOATING MINIMAL HUD OVERLAYS -->
+  <div class="drift-hud-overlay" aria-label="Spatial Canvas HUD">
+
+    <!-- Top HUD Row -->
+    <header class="drift-hud-top">
+      <div class="drift-hud-top-left">
+        <a href="/#journey" class="drift-hud-btn drift-hud-back-btn" id="drift-back-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>← BACK TO OVERVIEW</span>
+        </a>
+      </div>
+
+      <div class="drift-hud-top-right">
+        <button class="drift-hud-btn drift-fs-btn" id="drift-fullscreen-toggle" title="Toggle Fullscreen" type="button">
+          <svg class="fs-icon-enter" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+          <span class="fs-text">FULLSCREEN</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Bottom HUD Row -->
+    <footer class="drift-hud-bottom">
+      <div class="drift-hud-bottom-left">
+        <div class="drift-hud-counter-badge">
+          <span class="drift-bracket">[</span>
+          <span>28 VERIFIED MILESTONES // 2023 &#8212; 2027</span>
+          <span class="drift-bracket">]</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- JSON Source Data for DriftWall Component -->
+  <script id="driftwall-data" type="application/json">
+    {{ driftwall_json | safe }}
+  </script>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PHOTO LIGHTBOX MODAL
+══════════════════════════════════════════════════════════════ -->
+<div id="journey-lightbox" class="journey-lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="journey-lightbox-backdrop" id="journey-lightbox-backdrop"></div>
+  <div class="journey-lightbox-container">
+    <button class="journey-lightbox-close" id="journey-lightbox-close" aria-label="Close photo modal">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <button class="journey-lightbox-nav journey-lightbox-prev" id="journey-lightbox-prev" aria-label="Previous photo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <button class="journey-lightbox-nav journey-lightbox-next" id="journey-lightbox-next" aria-label="Next photo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="journey-lightbox-content">
+      <div class="journey-lightbox-img-wrap">
+        <img id="journey-lightbox-img" src="" alt="High resolution preview" />
+      </div>
+      <div class="journey-lightbox-meta">
+        <div class="journey-lightbox-meta-top">
+          <span id="journey-lightbox-tag" class="journey-lightbox-tag">EVENT</span>
+          <span id="journey-lightbox-counter" class="journey-lightbox-counter">[ 01 / 28 ]</span>
+        </div>
+        <div id="journey-lightbox-caption" class="journey-lightbox-caption">Photo caption text</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

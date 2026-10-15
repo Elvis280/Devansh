@@ -83,13 +83,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Logo → scroll to top
+  // Logo → scroll to top or navigate home
   navLogoBtn?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    closeMenu();
+    if (window.location.pathname !== '/' && window.location.pathname !== '') {
+      window.location.href = '/';
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      closeMenu();
+    }
   });
 
-  // Nav link items → smooth scroll
+  // Nav link items → smooth scroll or navigate to section on home page
   document.querySelectorAll('.nav-link-item[data-target]').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = document.getElementById(btn.dataset.target);
@@ -98,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           target.scrollIntoView({ behavior: 'smooth' });
         }, 300);
+      } else {
+        closeMenu();
+        window.location.href = `/#${btn.dataset.target}`;
       }
     });
   });
@@ -205,8 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const infiniteCanvas = document.getElementById('infinite-grid-menu-canvas');
   let infiniteSketch = null;
   let activeProjectIndex = 0;
-  let activeProjectId = projectsData[0]?.id || 'knowfforge';
-  let activeTab = 'overview';
 
   // HUD and Overlay DOM Elements
   const menuActivePill = document.getElementById('menu-active-pill');
@@ -229,8 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
     activeProjectIndex = itemIndex;
     const item = projectsData[itemIndex];
     if (!item) return;
-
-    activeProjectId = item.id;
 
     // Update Top HUD
     if (menuActivePill) menuActivePill.textContent = `SYS // ${item.number}`;
@@ -390,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // SVG Node interactions (hover sync + click toggle)
+  // SVG Node interactions (hover sync + click navigation)
   journeyNodes.forEach(node => {
     const step = node.dataset.step;
     const matchingCard = document.querySelector(`.exp-cards-row .exp-card[data-step="${step}"]`);
@@ -402,10 +405,8 @@ document.addEventListener('DOMContentLoaded', () => {
       matchingCard?.classList.remove('hover-synced');
     });
     node.addEventListener('click', () => {
-      if (matchingCard?.classList.contains('active')) {
-        clearStepActive();
-      } else {
-        setStepActive(step);
+      if (matchingCard && matchingCard.getAttribute('href')) {
+        window.location.href = matchingCard.getAttribute('href');
       }
     });
   });
@@ -799,7 +800,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeCaseModal();
-      closeExpModal();
       if (dossierModal?.classList.contains('open')) {
         dossierModal.classList.remove('open');
         document.body.style.overflow = '';
@@ -809,3 +809,4 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
