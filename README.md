@@ -299,4 +299,4 @@ Lucknow, Uttar Pradesh, India
 
 ---
 
-*Licensed under the [MIT License](LICENSE).*
+
