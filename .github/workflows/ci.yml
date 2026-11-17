@@ -39,3 +39,5 @@ jobs:
 
       - name: Run Pytest suite
         run: pytest -v
+        env:
+          PYTHONPATH: .
