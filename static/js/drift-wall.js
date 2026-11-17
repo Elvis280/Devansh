@@ -92,6 +92,8 @@
       this.rafId = null;
       this.lastTs = null;
       this.containerRect = null;
+      this.imageObserver = null;
+      this.frameCount = 0;
 
       this.init();
     }
@@ -99,8 +101,8 @@
     init() {
       this.updateRect();
       this.applyCSSVariables();
+      this.setupImageObserver();
       this.buildDOM();
-      this.setupColumns();
       this.bindEvents();
       this.start();
     }
@@ -176,12 +178,76 @@
             const tileId = `${c}-${copyIndex}-${itemIndex}`;
             const tileEl = this.createTileElement(item, tileId, c, itemIndex);
             trackEl.appendChild(tileEl);
+            if (this.imageObserver) {
+              this.imageObserver.observe(tileEl);
+            } else {
+              this.loadTileImage(tileEl);
+            }
           });
         }
 
         colEl.appendChild(trackEl);
         this.planeEl.appendChild(colEl);
         this.trackEls.push(trackEl);
+      });
+    }
+
+    setupImageObserver() {
+      if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+        this.imageObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                this.loadTileImage(entry.target);
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: '300px 150px',
+            threshold: 0.01,
+          }
+        );
+      }
+    }
+
+    loadTileImage(tileEl) {
+      if (!tileEl) return;
+      const img = tileEl.querySelector('img[data-src]');
+      if (!img) return;
+      const src = img.dataset.src;
+      if (!src) return;
+      img.removeAttribute('data-src');
+      img.src = src;
+      if (img.complete) {
+        img.classList.add('is-loaded');
+      } else {
+        img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+        img.addEventListener('error', () => img.classList.add('is-loaded'), { once: true });
+      }
+    }
+
+    checkVisibleTiles() {
+      const pending = this.container.querySelectorAll('.drift-wall__tile img[data-src]');
+      if (!pending.length) return;
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      const margin = 250;
+      pending.forEach((img) => {
+        const rect = img.getBoundingClientRect();
+        if (
+          rect.bottom >= -margin &&
+          rect.top <= vh + margin &&
+          rect.right >= -margin &&
+          rect.left <= vw + margin
+        ) {
+          const tile = img.closest('.drift-wall__tile');
+          if (tile) {
+            this.loadTileImage(tile);
+            this.imageObserver?.unobserve(tile);
+          }
+        }
       });
     }
 
@@ -199,11 +265,16 @@
       inner.className = 'drift-wall__inner';
 
       const img = document.createElement('img');
-      img.src = item.image || item.src;
+      const thumbSrc = item.thumb || item.image || item.src;
+      img.dataset.src = thumbSrc;
       img.alt = item.title || item.caption || '';
+      img.setAttribute('loading', 'lazy');
       img.loading = 'lazy';
+      img.setAttribute('decoding', 'async');
       img.decoding = 'async';
       img.draggable = false;
+      // Lightweight transparent placeholder to prevent layout shifts and defer image downloading
+      img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E';
       inner.appendChild(img);
 
       const overlay = document.createElement('span');
@@ -411,6 +482,12 @@
           }
         }
 
+        // Periodic visibility check ensures drifted tiles load even with continuous 3D transforms
+        this.frameCount = (this.frameCount || 0) + 1;
+        if (this.frameCount % 24 === 0) {
+          this.checkVisibleTiles();
+        }
+
         this.rafId = requestAnimationFrame(animate);
       };
 
@@ -419,6 +496,10 @@
 
     destroy() {
       if (this.rafId) cancelAnimationFrame(this.rafId);
+      if (this.imageObserver) {
+        this.imageObserver.disconnect();
+        this.imageObserver = null;
+      }
       this.container.removeEventListener('pointermove', this.handlePointerMove);
       this.container.removeEventListener('pointerenter', this.handlePointerEnter);
       this.container.removeEventListener('pointerleave', this.handlePointerLeave);
@@ -428,11 +509,11 @@
 
     getDefaultItems() {
       return [
-        { image: '/static/img/images/AlgoZ1.jpg', title: 'AlgoZenith Flagship Workshop', tag: 'WORKSHOP', category: 'AlgoZenith SRMCEM' },
-        { image: '/static/img/images/GFG1.jpg', title: 'GeeksforGeeks Flagship Hackathon', tag: 'KEYNOTE', category: 'GeeksforGeeks_SRMCEM' },
-        { image: '/static/img/images/AlgoZ5.JPG', title: 'AlgoZenith Core Executive Team', tag: 'CORE TEAM', category: 'AlgoZenith SRMCEM' },
-        { image: '/static/img/images/GFG7.jpg', title: 'GeeksforGeeks Chapter Team Photo', tag: 'CORE TEAM', category: 'GeeksforGeeks_SRMCEM' },
-        { image: '/static/img/images/AlgoZ4.jpg', title: 'Campus Coding League & Problem Solving', tag: 'CONTEST', category: 'AlgoZenith SRMCEM' },
+        { thumb: '/static/img/images/thumbs/AlgoZ1.webp', full: '/static/img/images/full/AlgoZ1.webp', image: '/static/img/images/thumbs/AlgoZ1.webp', title: 'AlgoZenith Flagship Workshop', tag: 'WORKSHOP', category: 'AlgoZenith SRMCEM' },
+        { thumb: '/static/img/images/thumbs/GFG1.webp', full: '/static/img/images/full/GFG1.webp', image: '/static/img/images/thumbs/GFG1.webp', title: 'GeeksforGeeks Flagship Hackathon', tag: 'KEYNOTE', category: 'GeeksforGeeks_SRMCEM' },
+        { thumb: '/static/img/images/thumbs/AlgoZ5.webp', full: '/static/img/images/full/AlgoZ5.webp', image: '/static/img/images/thumbs/AlgoZ5.webp', title: 'AlgoZenith Core Executive Team', tag: 'CORE TEAM', category: 'AlgoZenith SRMCEM' },
+        { thumb: '/static/img/images/thumbs/GFG7.webp', full: '/static/img/images/full/GFG7.webp', image: '/static/img/images/thumbs/GFG7.webp', title: 'GeeksforGeeks Chapter Team Photo', tag: 'CORE TEAM', category: 'GeeksforGeeks_SRMCEM' },
+        { thumb: '/static/img/images/thumbs/AlgoZ4.webp', full: '/static/img/images/full/AlgoZ4.webp', image: '/static/img/images/thumbs/AlgoZ4.webp', title: 'Campus Coding League & Problem Solving', tag: 'CONTEST', category: 'AlgoZenith SRMCEM' },
       ];
     }
   }
@@ -467,15 +548,24 @@
     const lightboxBackdrop = document.getElementById('journey-lightbox-backdrop');
 
     let currentTileIdx = 0;
+    let currentPreloader = null;
 
     function openTileLightbox(idx) {
       if (!items || !items.length) return;
       currentTileIdx = ((idx % items.length) + items.length) % items.length;
       const it = items[currentTileIdx];
+      const targetIdx = currentTileIdx;
 
       if (lightbox && lightboxImg) {
-        lightboxImg.src = it.image || it.src;
+        const thumbSrc = it.thumb || it.image || it.src;
+        const fullSrc = it.full || it.image || it.src;
+
+        // 1. Thumbnail-first: instantly show cached lightweight thumbnail
+        lightboxImg.src = thumbSrc;
         lightboxImg.alt = it.title || it.caption || '';
+        lightboxImg.classList.remove('is-full-res');
+        lightboxImg.classList.add('is-thumb');
+
         if (lightboxCaption) lightboxCaption.textContent = it.title || it.caption || '';
         if (lightboxTag) lightboxTag.textContent = it.tag || 'MILESTONE';
         if (lightboxCounter) {
@@ -485,6 +575,32 @@
         lightbox.classList.add('active');
         lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+
+        // 2. Cancel any pending previous full-res image preloader
+        if (currentPreloader) {
+          currentPreloader.onload = null;
+          currentPreloader.onerror = null;
+          currentPreloader = null;
+        }
+
+        // 3. Load full-resolution image ONLY on-demand when someone opens the photo
+        if (fullSrc && fullSrc !== thumbSrc) {
+          const preloader = new Image();
+          currentPreloader = preloader;
+          preloader.decoding = 'async';
+          preloader.src = fullSrc;
+          preloader.onload = () => {
+            // Swap to full resolution only if the user is still on this photo
+            if (currentTileIdx === targetIdx && lightboxImg) {
+              lightboxImg.src = fullSrc;
+              lightboxImg.classList.remove('is-thumb');
+              lightboxImg.classList.add('is-full-res');
+            }
+          };
+        } else {
+          lightboxImg.classList.remove('is-thumb');
+          lightboxImg.classList.add('is-full-res');
+        }
       }
     }
 
@@ -493,6 +609,18 @@
         lightbox.classList.remove('active');
         lightbox.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        if (currentPreloader) {
+          currentPreloader.onload = null;
+          currentPreloader.onerror = null;
+          currentPreloader = null;
+        }
+        // Free lightbox image memory once modal closes
+        setTimeout(() => {
+          if (!lightbox.classList.contains('active') && lightboxImg) {
+            lightboxImg.src = '';
+            lightboxImg.classList.remove('is-full-res', 'is-thumb');
+          }
+        }, 300);
       }
     }
 

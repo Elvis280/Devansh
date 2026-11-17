@@ -5,20 +5,50 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ── LOADER ────────────────────────────────────────────────── */
+  /* ── LOADER (Render-Gated, No Artificial Timers) ──────────── */
   const loader = document.getElementById('loader');
   const mainContent = document.getElementById('main-content');
-  if (loader && mainContent) {
-    setTimeout(() => {
-      loader.style.opacity = '0';
-      loader.style.transition = 'opacity 0.6s ease';
-      setTimeout(() => {
-        loader.style.display = 'none';
+
+  if (loader) {
+    let dismissed = false;
+
+    const dismissLoader = () => {
+      if (dismissed) return;
+      dismissed = true;
+
+      if (mainContent) {
         mainContent.style.opacity = '1';
-      }, 600);
-    }, 1800);
-    mainContent.style.opacity = '0';
-    mainContent.style.transition = 'opacity 0.8s cubic-bezier(0.16,1,0.3,1)';
+      }
+
+      loader.style.opacity = '0';
+      loader.style.pointerEvents = 'none';
+
+      loader.addEventListener('transitionend', () => {
+        loader.style.display = 'none';
+        loader.remove();
+      }, { once: true });
+
+      setTimeout(() => {
+        if (loader.parentNode) {
+          loader.style.display = 'none';
+          loader.remove();
+        }
+      }, 350);
+    };
+
+    // Critical rendering conditions: Custom typography loaded & layout ready
+    const fontReadyPromise = document.fonts ? document.fonts.ready : Promise.resolve();
+
+    fontReadyPromise.then(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(dismissLoader);
+      });
+    }).catch(() => {
+      dismissLoader();
+    });
+
+    // Safety fallback only if fonts hang on a broken network
+    setTimeout(dismissLoader, 2000);
   }
 
   /* ── NAVIGATION ────────────────────────────────────────────── */
