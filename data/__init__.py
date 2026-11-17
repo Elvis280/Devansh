@@ -1,10 +1,10 @@
 from data.portfolio_data import (
-    personal_info,
-    personality,
-    stats,
-    skill_categories,
-    projects,
+    certificates,
     experiments,
     journey_milestones,
-    certificates,
+    personal_info,
+    personality,
+    projects,
+    skill_categories,
+    stats,
 )

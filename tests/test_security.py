@@ -1,9 +1,6 @@
-import os
-from pathlib import Path
-import pytest
 from fastapi.testclient import TestClient
 
-from main import app, STATIC_DIR
+from main import app
 
 client = TestClient(app)
 
@@ -17,7 +14,7 @@ def test_security_headers_on_html_response():
     assert response.headers.get("x-content-type-options") == "nosniff"
     assert response.headers.get("x-frame-options") == "DENY"
     assert response.headers.get("referrer-policy") == "strict-origin-when-cross-origin"
-    
+
     csp = response.headers.get("content-security-policy", "")
     assert "default-src 'self'" in csp
     assert "frame-ancestors 'none'" in csp
@@ -137,7 +134,6 @@ def test_cv_download_route():
 
 def test_resume_missing_returns_404(monkeypatch, tmp_path):
     """When neither resume file exists, it returns HTTP 404 instead of 500."""
-    from main import STATIC_DIR
     import main
 
     # Temporarily point STATIC_DIR to an empty temporary path

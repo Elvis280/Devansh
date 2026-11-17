@@ -1,5 +1,5 @@
-import os
 from pathlib import Path
+
 from PIL import Image
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +20,7 @@ def optimize_image(src_path: Path, dst_path: Path, max_size: tuple[int, int], qu
 
         img.thumbnail(max_size, Image.Resampling.LANCZOS)
         img.save(dst_path, 'WEBP', quality=quality, method=6)
-        
+
     src_kb = src_path.stat().st_size / 1024
     dst_kb = dst_path.stat().st_size / 1024
     ratio = (1 - (dst_kb / src_kb)) * 100 if src_kb > 0 else 0
@@ -101,7 +101,7 @@ def run():
         std_dst = images_dir / f"{stem}.webp"
 
         src_kb = src.stat().st_size / 1024
-        
+
         # 1. Thumbnail
         _, t_kb = optimize_image(src, thumb_dst, (500, 350), 80)
         # 2. Full Lightbox

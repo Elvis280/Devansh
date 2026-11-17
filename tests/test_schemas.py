@@ -2,8 +2,9 @@
 test_schemas.py — Tests for Pydantic Models and Swagger / OpenAPI generation
 """
 from fastapi.testclient import TestClient
+
 from main import app
-from routers.portfolio import Project, Experiment, Certificate
+from routers.portfolio import Certificate, Experiment, Project
 
 client = TestClient(app)
 

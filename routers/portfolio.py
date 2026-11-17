@@ -1,21 +1,21 @@
 """
 portfolio.py — All portfolio API routes with Pydantic Models & OpenAPI documentation
 """
-from typing import Optional
+
 from fastapi import APIRouter, HTTPException, Path, Query
 from pydantic import BaseModel, ConfigDict, Field
 
 from data.portfolio_data import (
-    personal_info,
-    personality,
+    certificates,
     experience,
-    leadership,
-    stats,
-    skill_categories,
-    projects,
     experiments,
     journey_milestones,
-    certificates,
+    leadership,
+    personal_info,
+    personality,
+    projects,
+    skill_categories,
+    stats,
 )
 
 # ── Pydantic Models ───────────────────────────────────────────────────────────
@@ -51,7 +51,7 @@ class Project(BaseModel):
     featured: bool = Field(default=False, description="Whether project is featured on the hero showcase")
     category: str = Field(..., description="Domain category classification", examples=["AI Knowledge Base & RAG"])
     workflow: list[ProjectWorkflowStep] = Field(default_factory=list, description="Step-by-step workflow architecture")
-    case_study: Optional[ProjectCaseStudy] = Field(default=None, description="Detailed project case study deep dive")
+    case_study: ProjectCaseStudy | None = Field(default=None, description="Detailed project case study deep dive")
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -223,7 +223,7 @@ async def get_skills():
     description="Return all projects with full typed schema. Optionally filter by `featured=true`.",
 )
 async def get_projects(
-    featured: Optional[bool] = Query(default=None, description="Filter projects by featured status")
+    featured: bool | None = Query(default=None, description="Filter projects by featured status")
 ):
     """
     Return all projects. Optionally filter by featured=true.
@@ -262,7 +262,7 @@ async def get_project(
     description="Return all research and engineering experiments. Optionally filter by status (e.g. CONCLUDED).",
 )
 async def get_experiments(
-    status: Optional[str] = Query(default=None, max_length=50, description="Experiment status filter (e.g. CONCLUDED)")
+    status: str | None = Query(default=None, max_length=50, description="Experiment status filter (e.g. CONCLUDED)")
 ):
     """
     Return all experiments. Optionally filter by status.

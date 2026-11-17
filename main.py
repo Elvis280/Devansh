@@ -9,24 +9,24 @@ import re
 from datetime import date
 from pathlib import Path
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from data.portfolio_data import (
-    personal_info,
-    personality,
+    certificates,
     experience,
-    leadership,
-    stats,
-    skill_categories,
-    projects,
     experiments,
     journey_milestones,
-    certificates,
+    leadership,
+    personal_info,
+    personality,
+    projects,
+    skill_categories,
+    stats,
 )
 from routers.portfolio import router as portfolio_router
 
